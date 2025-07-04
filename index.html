@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Tinder - Conecta con personas increíbles</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-header">
+            <div class="logo">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h1>Mini Tinder</h1>
+            <p>Conecta con personas increíbles</p>
+        </div>
+        
+        <!-- Pantalla de Login -->
+        <div id="loginScreen" class="screen active">
+            <div class="form-group">
+                <label for="loginEmail">Correo electrónico</label>
+                <input type="email" id="loginEmail" class="form-control" placeholder="tucorreo@ejemplo.com">
+                <div id="loginEmailError" class="error-message">Por favor ingresa un correo válido</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="loginPassword">Contraseña</label>
+                <input type="password" id="loginPassword" class="form-control" placeholder="Tu contraseña">
+                <div id="loginPasswordError" class="error-message">La contraseña debe tener al menos 6 caracteres</div>
+            </div>
+            
+            <button id="loginBtn" class="btn btn-primary">Iniciar sesión</button>
+            <button class="btn btn-secondary" id="showRegisterBtn">
+                <i class="fas fa-user-plus"></i> Registrarse
+            </button>
+            
+            <div class="switch-screen">
+                ¿Olvidaste tu contraseña? <a id="showRecoveryBtn">Recuperar</a>
+            </div>
+        </div>
+        
+        <!-- Pantalla de Registro -->
+        <div id="registerScreen" class="screen">
+            <div class="name-group">
+                <div class="form-group">
+                    <label for="regFirstName">Nombre</label>
+                    <input type="text" id="regFirstName" class="form-control" placeholder="Tu nombre">
+                    <div id="regFirstNameError" class="error-message">Por favor ingresa tu nombre</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="regLastName">Apellido</label>
+                    <input type="text" id="regLastName" class="form-control" placeholder="Tu apellido">
+                    <div id="regLastNameError" class="error-message">Por favor ingresa tu apellido</div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="regEmail">Correo electrónico</label>
+                <input type="email" id="regEmail" class="form-control" placeholder="tucorreo@ejemplo.com">
+                <div id="regEmailError" class="error-message">Por favor ingresa un correo válido</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="regPassword">Contraseña</label>
+                <input type="password" id="regPassword" class="form-control" placeholder="Crea una contraseña segura">
+                <div id="regPasswordError" class="error-message">La contraseña debe tener al menos 6 caracteres</div>
+            </div>
+            
+            <div class="birthday-group">
+                <div class="form-group birthday-input">
+                    <label for="regBirthDate">Fecha de nacimiento</label>
+                    <input type="date" id="regBirthDate" class="form-control">
+                    <div id="regBirthDateError" class="error-message">Debes tener al menos 18 años</div>
+                    <div class="form-note">Se calculará automáticamente tu edad</div>
+                </div>
+                
+                <div class="age-display">
+                    <div>Tu edad</div>
+                    <div id="ageDisplay" class="age-value">--</div>
+                </div>
+            </div>
+
+            <!-- Selección de sexo -->
+            <div class="form-group">
+                <label>Sexo</label>
+                <div class="gender-selection">
+                    <div class="gender-option">
+                        <button type="button" class="gender-btn" id="maleBtn">
+                            <i class="fas fa-mars"></i>
+                            Hombre
+                        </button>
+                    </div>
+                    <div class="gender-option">
+                        <button type="button" class="gender-btn" id="femaleBtn">
+                            <i class="fas fa-venus"></i>
+                            Mujer
+                        </button>
+                    </div>
+                </div>
+                <input type="hidden" id="regGender" value="">
+                <div id="regGenderError" class="error-message">Por favor selecciona tu sexo</div>
+            </div>
+
+            <!-- Preferencias de género -->
+            <div class="preferences-container">
+                <div class="preferences-title">
+                    <i class="fas fa-heart"></i>
+                    <h3>Me interesan</h3>
+                </div>
+                <div class="preferences-grid" id="preferencesGrid">
+                    <label class="preference-item">
+                        <input type="checkbox" class="preference-checkbox" name="preferences" value="hombres">
+                        <i class="fas fa-mars preference-icon"></i>
+                        <span>Hombres</span>
+                    </label>
+                    <label class="preference-item">
+                        <input type="checkbox" class="preference-checkbox" name="preferences" value="mujeres">
+                        <i class="fas fa-venus preference-icon"></i>
+                        <span>Mujeres</span>
+                    </label>
+                </div>
+                <div id="preferencesError" class="error-message">Por favor selecciona al menos una opción</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="regLocation">Ubicación</label>
+                <input type="text" id="regLocation" class="form-control" placeholder="Ciudad, País">
+                <div id="regLocationError" class="error-message">Por favor ingresa tu ubicación</div>
+            </div>
+
+            <!-- Sección de gustos/intereses -->
+            <div class="interests-container">
+                <div class="interests-title">
+                    <i class="fas fa-heart"></i>
+                    <h3>Mis gustos e intereses</h3>
+                </div>
+                <div class="interests-grid" id="interestsGrid">
+                    <label class="interest-item">
+                        <input type="checkbox" class="interest-checkbox" name="interests" value="deportes">
+                        <i class="fas fa-running interest-icon"></i>
+                        <span>Deportes</span>
+                    </label>
+                    <label class="interest-item">
+                        <input type="checkbox" class="interest-checkbox" name="interests" value="cine">
+                        <i class="fas fa-film interest-icon"></i>
+                        <span>Cine</span>
+                    </label>
+                    <label class="interest-item">
+                        <input type="checkbox" class="interest-checkbox" name="interests" value="salidas">
+                        <i class="fas fa-utensils interest-icon"></i>
+                        <span>Salidas</span>
+                    </label>
+                    <label class="interest-item">
+                        <input type="checkbox" class="interest-checkbox" name="interests" value="comer">
+                        <i class="fas fa-hamburger interest-icon"></i>
+                        <span>Comer</span>
+                    </label>
+                    <label class="interest-item">
+                        <input type="checkbox" class="interest-checkbox" name="interests" value="leer">
+                        <i class="fas fa-book interest-icon"></i>
+                        <span>Leer</span>
+                    </label>
+                    <label class="interest-item">
+                        <input type="checkbox" class="interest-checkbox" name="interests" value="bailar">
+                        <i class="fas fa-music interest-icon"></i>
+                        <span>Bailar</span>
+                    </label>
+                    <label class="interest-item">
+                        <input type="checkbox" class="interest-checkbox" name="interests" value="tomar">
+                        <i class="fas fa-glass-cheers interest-icon"></i>
+                        <span>Tomar</span>
+                    </label>
+                    <label class="interest-item">
+                        <input type="checkbox" class="interest-checkbox" name="interests" value="viajar">
+                        <i class="fas fa-plane interest-icon"></i>
+                        <span>Viajar</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Foto de Perfil</label>
+                <div class="profile-preview" id="profilePreview">
+                    <i class="fas fa-user default-avatar"></i>
+                </div>
+                <div class="upload-section" id="uploadTrigger">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Haz clic para subir una foto</p>
+                    <div class="upload-btn">Seleccionar imagen</div>
+                </div>
+                <input type="file" id="profilePhoto" accept="image/*" style="display: none;">
+            </div>
+            
+            <button id="registerBtn" class="btn btn-primary">Registrarse</button>
+            <button class="btn btn-secondary" id="backToLoginBtn">
+                <i class="fas fa-arrow-left"></i> Volver a inicio de sesión
+            </button>
+        </div>
+
+        <!-- Pantalla de Recuperación de Contraseña -->
+        <div id="recoveryScreen" class="screen">
+            <div class="recovery-steps">
+                <div class="recovery-step active" id="step1">1</div>
+                <div class="recovery-step" id="step2">2</div>
+                <div class="recovery-step" id="step3">3</div>
+            </div>
+
+            <!-- Paso 1: Ingresar correo -->
+            <div class="recovery-content" id="recoveryStep1">
+                <h2>Recuperar contraseña</h2>
+                <p>Ingresa tu correo electrónico para recibir un código de verificación</p>
+                
+                <div class="form-group">
+                    <label for="recoveryEmail">Correo electrónico</label>
+                    <input type="email" id="recoveryEmail" class="form-control" placeholder="tucorreo@ejemplo.com">
+                    <div id="recoveryEmailError" class="error-message">Por favor ingresa un correo válido</div>
+                </div>
+                
+                <div class="recovery-actions">
+                    <button class="btn btn-secondary" id="cancelRecoveryBtn">
+                        <i class="fas fa-arrow-left"></i> Cancelar
+                    </button>
+                    <button class="btn btn-primary" id="sendRecoveryCodeBtn">
+                        Enviar código <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Paso 2: Ingresar código -->
+            <div class="recovery-content" id="recoveryStep2" style="display: none;">
+                <h2>Verifica tu identidad</h2>
+                <p>Hemos enviado un código de verificación a tu correo electrónico. Por favor ingrésalo a continuación.</p>
+                
+                <div class="form-group">
+                    <label for="recoveryCode">Código de verificación</label>
+                    <input type="text" id="recoveryCode" class="form-control" placeholder="Ingresa el código de 6 dígitos">
+                    <div id="recoveryCodeError" class="error-message">El código debe tener 6 dígitos</div>
+                </div>
+                
+                <div class="recovery-actions">
+                    <button class="btn btn-secondary" id="backToStep1Btn">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </button>
+                    <button class="btn btn-primary" id="verifyRecoveryCodeBtn">
+                        Verificar código <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Paso 3: Nueva contraseña -->
+            <div class="recovery-content" id="recoveryStep3" style="display: none;">
+                <h2>Establece una nueva contraseña</h2>
+                <p>Por favor ingresa una nueva contraseña para tu cuenta.</p>
+                
+                <div class="form-group">
+                    <label for="newPassword">Nueva contraseña</label>
+                    <input type="password" id="newPassword" class="form-control" placeholder="Ingresa tu nueva contraseña">
+                    <div id="newPasswordError" class="error-message">La contraseña debe tener al menos 6 caracteres</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar contraseña</label>
+                    <input type="password" id="confirmPassword" class="form-control" placeholder="Repite tu nueva contraseña">
+                    <div id="confirmPasswordError" class="error-message">Las contraseñas no coinciden</div>
+                </div>
+                
+                <div class="recovery-actions">
+                    <button class="btn btn-secondary" id="backToStep2Btn">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </button>
+                    <button class="btn btn-primary" id="saveNewPasswordBtn">
+                        Guardar contraseña <i class="fas fa-check"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pantalla Principal -->
+        <div id="mainScreen" class="screen">
+            <!-- Botón de editar movido a la esquina superior izquierda -->
+            <button class="edit-profile-btn" id="editProfileBtn">
+                <i class="fas fa-user-edit"></i>
+            </button>
+            
+            <!-- Botón de matches -->
+            <button class="chat-btn" id="chatBtn">
+                <i class="fas fa-heart"></i>
+            </button>
+            
+            <!-- Botón de estadísticas -->
+            <button class="stats-btn" id="statsBtn">
+                <i class="fas fa-chart-line"></i>
+            </button>
+            
+            <!-- Botón de cerrar sesión -->
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+            
+            <div class="indicator like-indicator">LIKE</div>
+            <div class="indicator dislike-indicator">NOPE</div>
+            
+            <!-- Mensaje cuando no hay perfiles disponibles -->
+            <div id="noProfilesMessage" class="no-profiles" style="display: none;">
+                <i class="fas fa-user-friends"></i>
+                <h3>No hay perfiles disponibles</h3>
+                <p>Actualmente no tenemos otros perfiles para mostrar.</p>
+                <p>Invita a tus amigos para que se unan a la aplicación.</p>
+            </div>
+            
+            <!-- Contenedor de perfiles (NUEVO) -->
+            <div class="profiles-container" id="profilesContainer">
+                <!-- Los perfiles se cargarán dinámicamente aquí -->
+            </div>
+            
+            <div class="actions">
+                <button class="action-btn dislike" id="dislikeBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+                <button class="action-btn like" id="likeBtn">
+                    <i class="fas fa-heart"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Pantalla de Edición de Perfil -->
+        <div id="editProfileScreen" class="screen">
+            <h2 style="margin-bottom: 20px; color: #ff758c; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-user-edit"></i> Editar Perfil
+            </h2>
+            
+            <div class="name-group">
+                <div class="form-group">
+                    <label for="editFirstName">Nombre</label>
+                    <input type="text" id="editFirstName" class="form-control" value="Sofía">
+                </div>
+                
+                <div class="form-group">
+                    <label for="editLastName">Apellido</label>
+                    <input type="text" id="editLastName" class="form-control" value="Martínez">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="editBirthDate">Fecha de nacimiento</label>
+                <input type="date" id="editBirthDate" class="form-control" value="1998-05-15">
+            </div>
+
+            <!-- Selección de sexo en edición -->
+            <div class="form-group">
+                <label>Sexo</label>
+                <div class="gender-selection">
+                    <div class="gender-option">
+                        <button type="button" class="gender-btn" id="editMaleBtn">
+                            <i class="fas fa-mars"></i>
+                            Hombre
+                        </button>
+                    </div>
+                    <div class="gender-option">
+                        <button type="button" class="gender-btn" id="editFemaleBtn">
+                            <i class="fas fa-venus"></i>
+                            Mujer
+                        </button>
+                    </div>
+                </div>
+                <input type="hidden" id="editGender" value="">
+            </div>
+
+            <!-- Preferencias de género en edición -->
+            <div class="preferences-container">
+                <div class="preferences-title">
+                    <i class="fas fa-heart"></i>
+                    <h3>Me interesan</h3>
+                </div>
+                <div class="preferences-grid" id="editPreferencesGrid">
+                    <label class="preference-item">
+                        <input type="checkbox" class="preference-checkbox" name="editPreferences" value="hombres">
+                        <i class="fas fa-mars preference-icon"></i>
+                        <span>Hombres</span>
+                    </label>
+                    <label class="preference-item">
+                        <input type="checkbox" class="preference-checkbox" name="editPreferences" value="mujeres">
+                        <i class="fas fa-venus preference-icon"></i>
+                        <span>Mujeres</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="editBio">Biografía</label>
+                <textarea id="editBio" class="form-control" rows="3">Amante de la naturaleza, viajes y buena comida. Busco alguien con quien explorar el mundo.</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="editLocation">Ubicación</label>
+                <input type="text" id="editLocation" class="form-control" value="Madrid, España">
+            </div>
+
+            <!-- Sección de gustos/intereses en edición -->
+            <div class="interests-container">
+                <div class="interests-title">
+                    <i class="fas fa-heart"></i>
+                    <h3>Mis gustos e intereses</h3>
+                </div>
+                <div class="interests-grid" id="editInterestsGrid">
+                    <label class="interest-item">
+                        <input type="checkbox" class="interest-checkbox" name="editInterests" value="deportes">
+                        <i class="fas fa-running interest-icon"></i>
+                        <span>Deportes</span>
+                    </label>
+                    <label class="interest-item">
+                        <input type="checkbox" class="interest-checkbox" name="editInterests" value="cine">
+                        <i class="fas fa-film interest-icon"></i>
+                        <span>Cine</span>
+                    </label>
+                    <label class="interest-item">
+                        <input type="checkbox" class="interest-checkbox" name="editInterests" value="salidas">
+                        <i class="fas fa-utensils interest-icon"></i>
+                        <span>Salidas</span>
+                    </label>
+                    <label class="interest-item">
+                        <input type="checkbox" class="interest-checkbox" name="editInterests" value="comer">
+                        <i class="fas fa-hamburger interest-icon"></i>
+                        <span>Comer</span>
+                    </label>
+                    <label class="interest-item">
+                        <input type="checkbox" class="interest-checkbox" name="editInterests" value="leer">
+                        <i class="fas fa-book interest-icon"></i>
+                        <span>Leer</span>
+                    </label>
+                    <label class="interest-item">
+                        <input type="checkbox" class="interest-checkbox" name="editInterests" value="bailar">
+                        <i class="fas fa-music interest-icon"></i>
+                        <span>Bailar</span>
+                    </label>
+                    <label class="interest-item">
+                        <input type="checkbox" class="interest-checkbox" name="editInterests" value="tomar">
+                        <i class="fas fa-glass-cheers interest-icon"></i>
+                        <span>Tomar</span>
+                    </label>
+                    <label class="interest-item">
+                        <input type="checkbox" class="interest-checkbox" name="editInterests" value="viajar">
+                        <i class="fas fa-plane interest-icon"></i>
+                        <span>Viajar</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Foto de Perfil</label>
+                <div class="profile-preview" id="editProfilePreview">
+                    <i class="fas fa-user default-avatar"></i>
+                </div>
+                <div class="upload-section" id="editUploadTrigger">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Haz clic para cambiar tu foto</p>
+                    <div class="upload-btn">Seleccionar imagen</div>
+                </div>
+                <input type="file" id="editProfilePhoto" accept="image/*" style="display: none;">
+            </div>
+            
+            <!-- Nueva sección para la galería de fotos -->
+            <div class="gallery-container">
+                <div class="gallery-title">
+                    <i class="fas fa-images"></i>
+                    <h3>Galería de Fotos</h3>
+                </div>
+                <div class="gallery-grid" id="galleryGrid">
+                    <!-- Las fotos se añadirán dinámicamente aquí -->
+                </div>
+                <div class="gallery-actions">
+                    <button class="gallery-btn add" id="addGalleryPhoto">
+                        <i class="fas fa-plus"></i> Agregar Foto
+                    </button>
+                </div>
+                <input type="file" id="galleryPhoto" accept="image/*" multiple style="display: none;">
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-secondary" id="cancelEditBtn" style="flex: 1;">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button class="btn btn-primary" id="saveProfileBtn" style="flex: 1;">
+                    <i class="fas fa-save"></i> Guardar Cambios
+                </button>
+            </div>
+        </div>
+        
+        <!-- Pantalla de Lista de Chats -->
+        <div id="chatListScreen" class="screen">
+            <div class="chat-header">
+                <button class="back-btn" id="backFromChatListBtn">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>Chats</h2>
+            </div>
+            
+            <div class="chat-list" id="chatList">
+                <!-- Los chats se añadirán dinámicamente aquí -->
+            </div>
+            
+            <div id="noChatsMessage" class="no-chats" style="display: none;">
+                <i class="fas fa-comment-slash"></i>
+                <h3>No tienes conversaciones</h3>
+                <p>Cuando hagas un match con alguien, aparecerá aquí para que puedas chatear.</p>
+            </div>
+        </div>
+        
+        <!-- Pantalla de Chat Individual -->
+        <div id="chatScreen" class="screen">
+            <div class="chat-header">
+                <button class="back-btn" id="backFromChatBtn">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="chat-user-info">
+                    <div class="chat-user-avatar" id="chatUserAvatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <div id="chatUserName">Nombre de Usuario</div>
+                        <div class="chat-status" id="chatStatus">En línea</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Los mensajes se añadirán dinámicamente aquí -->
+                </div>
+                
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Escribe un mensaje...">
+                    <button class="send-btn" id="sendBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pantalla de Estadísticas -->
+        <div id="statsScreen" class="screen">
+            <div class="chat-header">
+                <button class="back-btn" id="backFromStatsBtn">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>Estadísticas</h2>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stats-grid">
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="stats-value" id="likesReceived">0</div>
+                        <div class="stats-label">Me gusta recibidos</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="likesProgress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <div class="stats-value" id="matchesCount">0</div>
+                        <div class="stats-label">Matches realizados</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="matchesProgress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stats-card">
+                    <div class="stats-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Actividad reciente</h3>
+                    <div class="stats-chart" id="activityChart">
+                        <!-- Las barras del gráfico se añadirán dinámicamente -->
+                    </div>
+                </div>
+                
+                <div class="stats-card">
+                    <div class="stats-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h3>Interacciones</h3>
+                    <div style="display: flex; justify-content: space-around; margin-top: 20px;">
+                        <div style="text-align: center;">
+                            <div class="stats-value" id="likesSent">0</div>
+                            <div class="stats-label">Me gusta enviados</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="stats-value" id="dislikesSent">0</div>
+                            <div class="stats-label">No me gusta enviados</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pantalla de Matches -->
+        <div id="matchesScreen" class="screen">
+            <div class="chat-header">
+                <button class="back-btn" id="backFromMatchesBtn">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>Tus Matches</h2>
+            </div>
+            
+            <div class="matches-list" id="matchesList">
+                <!-- Los matches se añadirán dinámicamente aquí -->
+            </div>
+            
+            <div id="noMatchesMessage" class="no-chats" style="display: none;">
+                <i class="fas fa-heart-broken"></i>
+                <h3>No tienes matches aún</h3>
+                <p>Cuando hagas match con alguien, aparecerá aquí.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i> <span id="notificationMessage">Acción realizada con éxito</span>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
